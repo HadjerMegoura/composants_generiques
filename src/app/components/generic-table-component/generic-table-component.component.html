@@ -1,0 +1,25 @@
+<div>
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let header of headers;let i = index" (click)="sortData(i)">{{header}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of paginatedData">
+      <td *ngFor="let item of row">{{item}}</td>
+      </tr>
+  </tbody>  
+    
+  </table>
+</div>
+<hr>
+<div class="pagination_control">
+    <button id="Previous" (click)="prevPage()" [ngClass]="{'disabled': currentPage === 1}">Previous</button>
+    <button  id="current" *ngFor="let page of [].constructor(totalPages); let i = index"
+     (click)="goToPage(i+1)"
+     [ngClass]="{'active': currentPage === i+1 }"
+     >{{i+1}}</button>
+    <button id="next" (click)="nextPage()" [ngClass]="{'disabled': currentPage === totalPages}">Next</button>
+
+</div>
