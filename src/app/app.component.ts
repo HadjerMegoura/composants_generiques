@@ -115,6 +115,6 @@ export class AppComponent {
     },
   ];
 
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 5;
   currentPage: number = 1;
 }
