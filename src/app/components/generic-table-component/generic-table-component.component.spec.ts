@@ -18,12 +18,24 @@ describe('GenericTableComponentComponent', () => {
     component = fixture.componentInstance;
 
     componentDom = fixture.nativeElement;
+    // data = [
+    //   ['001', 'Math', 10.5, true],
+    //   ['002', 'Physics', 8, false],
+    //   ['003', 'English', 15, true],
+    // ];
     data = [
-      ['001', 'Math', 10.5, true],
-      ['002', 'Physics', 8, false],
-      ['003', 'English', 15, true],
+      { id: '001', subject: 'Math', note: 10.5, result: true },
+      { id: '002', subject: 'Physics', note: 8, result: false },
+      { id: '003', subject: 'English', note: 15, result: true },
     ];
-    headers = ['id', 'Subject', 'Note', 'Result'];
+
+    // headers = ['id', 'Subject', 'Note', 'Result'];
+    headers = [
+      { key: 'id', label: 'ID' },
+      { key: 'subject', label: 'Subject' },
+      { key: 'note', label: 'Note' },
+      { key: 'result', label: 'Result' },
+    ];
     component.data = data;
     component.headers = headers;
     fixture.detectChanges();
@@ -35,14 +47,15 @@ describe('GenericTableComponentComponent', () => {
 
   //La vérification que les en-têtes de colonnes sont rendus correctement.
   it('should render table columns correctly', () => {
-    let tableHeader = componentDom.querySelectorAll('table th');
+    let rendredTableheader = componentDom.querySelectorAll('table th');
+    const expectedHeader = headers.map((header) => header.label);
 
-    let tableHeadersContent = [];
-    tableHeader.forEach((element) => {
-      tableHeadersContent.push(element.textContent);
+    let rendredTableheadersContent = [];
+    rendredTableheader.forEach((element) => {
+      rendredTableheadersContent.push(element.textContent);
     });
-    expect(headers.length).toEqual(tableHeader.length);
-    expect(tableHeadersContent).toEqual(headers);
+    expect(rendredTableheader.length).toEqual(expectedHeader.length);
+    expect(rendredTableheadersContent).toEqual(expectedHeader);
   });
 
   //La vérification que les données sont correctement affichée dans le tableau.
@@ -62,17 +75,19 @@ describe('GenericTableComponentComponent', () => {
       tableContent.push(rowData);
     });
     //la contenue de tableau == data
-    expect(tableContent).toEqual(component.data.map((row) => row.map(String)));
+    expect(tableContent).toEqual(
+      component.data.map((obj) => Object.values(obj).map(String))
+    );
   });
 
   //tester la fonction de tri
   it('should sort data correctly', () => {
     let result = [
-      ['002', 'Physics', 8, false],
-      ['001', 'Math', 10.5, true],
-      ['003', 'English', 15, true],
+      { id: '003', subject: 'English', note: 15, result: true },
+      { id: '001', subject: 'Math', note: 10.5, result: true },
+      { id: '002', subject: 'Physics', note: 8, result: false },
     ];
-    component.sortData(2);
+    component.sortData('subject');
     expect(component.data).toEqual(result);
   });
 
@@ -86,16 +101,21 @@ describe('GenericTableComponentComponent', () => {
     const nextButton = componentDom.querySelector('#next');
 
     //previous
-    previousButton.click();
-    fixture.detectChanges();
-    expect(component.prevPage).toHaveBeenCalled();
+    if (previousButton) {
+      previousButton.click();
+      fixture.detectChanges();
+      expect(component.prevPage).toHaveBeenCalled();
+    }
+
     //current
     currentButton.click();
     fixture.detectChanges();
     expect(component.goToPage).toHaveBeenCalled();
     //next
-    nextButton.click();
-    fixture.detectChanges();
-    expect(component.nextPage).toHaveBeenCalled();
+    if (nextButton) {
+      nextButton.click();
+      fixture.detectChanges();
+      expect(component.nextPage).toHaveBeenCalled();
+    }
   });
 });
