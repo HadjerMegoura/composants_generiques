@@ -18,18 +18,13 @@ describe('GenericTableComponentComponent', () => {
     component = fixture.componentInstance;
 
     componentDom = fixture.nativeElement;
-    // data = [
-    //   ['001', 'Math', 10.5, true],
-    //   ['002', 'Physics', 8, false],
-    //   ['003', 'English', 15, true],
-    // ];
+
     data = [
       { id: '001', subject: 'Math', note: 10.5, result: true },
       { id: '002', subject: 'Physics', note: 8, result: false },
       { id: '003', subject: 'English', note: 15, result: true },
     ];
 
-    // headers = ['id', 'Subject', 'Note', 'Result'];
     headers = [
       { key: 'id', label: 'ID' },
       { key: 'subject', label: 'Subject' },
