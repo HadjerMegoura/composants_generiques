@@ -1,16 +1,16 @@
 import { Component, Input } from '@angular/core';
-import { NgFor, NgClass } from '@angular/common';
+import { NgFor, NgClass, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-generic-table-component',
   standalone: true,
-  imports: [NgFor, NgClass],
+  imports: [NgFor, NgClass, NgIf],
   templateUrl: './generic-table-component.component.html',
   styleUrl: './generic-table-component.component.css',
 })
-export class GenericTableComponentComponent {
-  @Input() headers: any[] = [];
-  @Input() data: any[] = [];
+export class GenericTableComponentComponent<T> {
+  @Input() data: T[] = [];
+  @Input() headers: { key: keyof T; label: string }[] = [];
   @Input() currentPage: number = 1;
   @Input() itemsPerPage: number = 5;
 
@@ -69,14 +69,14 @@ export class GenericTableComponentComponent {
    * @param {number}  index the index of the selected header
    */
 
-  sortData(index: number) {
+  sortData(key: string | number | symbol) {
     this.data.sort((a, b) => {
       //In case data are numbers define a sort logique
-      if (isFinite(a[index]) && isFinite(b[index])) {
-        return a[index] - b[index];
+      if (isFinite(a[key]) && isFinite(b[key])) {
+        return a[key] - b[key];
       }
       //else we're keeping normal str order
-      return a[index].localeCompare(b[index]);
+      return a[key].localeCompare(b[key]);
     });
   }
 }
